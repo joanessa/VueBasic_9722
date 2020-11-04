@@ -23,7 +23,7 @@
             
         <center>
             <h1>
-                <font size="10" color="black">   To Do List 📝</font>
+                <font size="10" color="black"> 😀 To Do List 📝 😀</font>
             </h1>
         </center>
         
@@ -80,16 +80,16 @@
         <ul>
             <div class="uk-card uk-card-default uk-card-body uk-light" style="padding: 20px; background-color:#bc8f8f;">
                 <button class="uk-button uk-button-danger uk-position-top-right" @click="$emit('remove')">
-                    <i uk-icon="close"></i>
+                    DELETE
                 </button>
                 <font size="5" v-if="task.priority == 'Penting'" style="color: red !important">
                     ❗ {{ task.priority }}
                 </font>
                 <font size="5" v-if="task.priority == 'Biasa'" style="color: blue !important">
-                    🔵 {{ task.priority }}
+                    💙 {{ task.priority }}
                 </font>
                 <font size="5" v-if="task.priority == 'Tidak Penting'" style="color: green !important">
-                    🟢 {{ task.priority }}
+                    💚 {{ task.priority }}
                 </font>
                 <h3>{{ task.title }}</h3>
                 <p>{{ task.note }}</p>
