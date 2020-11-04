@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial—scale=1.0">
+    <link rel="stylesheet" href="css/uikit.min.css" />
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
+    <title>TGS_VueBasic_C_9722</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div class="view" id="app">
+        <task-list :tasks="tasks"></task-list>
+        <div class="uk-position-bottom uk-overlay uk-overlay-default uk-text-center" ALIGN="center" style="position: fixed !important;">{{nama}} | {{npm}} | {{kelas}}</div>
+    </div>
+    
+    <template id="task-list">
+        <section class="tasks">
+            
+        <center>
+            <h1>
+                <font size="10" color="black">   To Do List 📝</font>
+            </h1>
+        </center>
+        
+        <div class="uk-card uk-card-default uk-width-1-2@m uk-position-small uk-position-center" style="    padding: 20px;
+            width: 40vw;
+            transform: translate(-50%, 0%);
+            min-height: 50vh;
+            margin-bottom: 20vh;">
+
+            <div class="tasks__new input-group">
+                <form name="form">
+                    <fieldset class="uk-fieldset">
+                        <h5 class="uk-text-normal uk-text-black">Nama To Do (Task)</h5>
+                        <input class="uk-textarea" type="text" v-model="title" ALIGN="left">
+
+                        <h5 class="uk-text-normal uk-text-black">Prioritas To Do (Task)</h5>
+                        <select class="uk-select" name="prior" v-model="priority">
+                            <option value="Penting" selected>Penting</option>
+                            <option value="Biasa">Biasa</option>
+                            <option value="Tidak Penting">Tidak Penting</option>
+                        </select>
+
+                        <h5 class="uk-text-normal uk-text-black">Catatan</h5>
+                        <textarea class="uk-textarea" type="text" v-model="note"></textarea>
+                    </fieldset>
+                </form>
+
+                <br>
+                <span class="input-group-button">
+                    <button class="uk-button uk-button-danger uk-button-small" @click="resetTask" class="button">Reset</button>
+                </span>
+                <span class="input-group-button">
+                    <button class="uk-button uk-button-primary uk-button-small" @click="addTask" class="button">Save</button>
+                </span>
+            </div>
+        </div>
+        
+        <transition-group name="fade" tag="ul" class="uk-position-top-center" style="    
+            margin-top: 60px;
+            width: 40vw;
+            overflow-y: auto;
+            max-height: 40vh;
+            transform: translate(-48%, 5%);">
+            <task-item v-for="(task, index) in tasks"
+                        @remove="removeTask(index)"
+                        :task="task"
+                        :key="task"
+            ></task-item>
+        </transition-group>
+        </section>
+    </template>
+    
+    <template id="task-item">
+        <ul>
+            <div class="uk-card uk-card-default uk-card-body uk-light" style="padding: 20px; background-color:#bc8f8f;">
+                <button class="uk-button uk-button-danger uk-position-top-right" @click="$emit('remove')">
+                    <i uk-icon="close"></i>
+                </button>
+                <font size="5" v-if="task.priority == 'Penting'" style="color: red !important">
+                    ❗ {{ task.priority }}
+                </font>
+                <font size="5" v-if="task.priority == 'Biasa'" style="color: blue !important">
+                    🔵 {{ task.priority }}
+                </font>
+                <font size="5" v-if="task.priority == 'Tidak Penting'" style="color: green !important">
+                    🟢 {{ task.priority }}
+                </font>
+                <h3>{{ task.title }}</h3>
+                <p>{{ task.note }}</p>
+            </div>
+        </ul>
+    </template>
+</body>
+<script>
+    Vue.component('task-list', {
+        template: '#task-list',
+        props: { tasks: { default: [] } },
+
+        data() {
+            return {
+            title: '', 
+            priority: '',
+            note: '' };
+        },
+
+        computed: {
+            incomplete() {
+                return this.tasks.filter(this.inProgress).length;
+            } },
+
+        methods: {
+            addTask() {
+                if (this.title && this.priority && this.note) {
+                    this.tasks.push({
+                        title: this.title,
+                        priority: this.priority,
+                        note: this.note,
+                        completed: false });
+
+                    this.title = '';
+                    this.priority = '';
+                    this.note = '';
+                }
+            },
+            resetTask(){
+                this.title = '';
+                    this.priority = '';
+                    this.note = '';
+            },
+            removeTask(index) {
+                this.tasks.splice(index, 1);
+            },
+            clearAll() {
+                this.tasks = [];
+            }
+        } 
+    });
+
+    Vue.component('task-item', {
+        template: '#task-item',
+        props: ['task'],
+        computed: {
+            className() {
+                let classes = ['tasks__item__toggle'];
+                if (this.task.completed) {
+                    classes.push('tasks__item__toggle--completed');
+                }
+                return classes.join(' ');
+            } 
+        } 
+    });
+
+    new Vue({
+        el: '#app',
+        data: {
+            tasks: [],
+            nama: "Maria Joanessa Mercyani Klau",
+            npm: "180709722",
+            kelas: "C"
+        }
+    });
+</script>
+<style>
+    html {
+        background: linear-gradient(103deg, #fdf5e6, #fdf5e6);
+        min-height: 100vh;
+        color: #ffffff9e;
+    }
+    .uk-input{width: auto; text-align: center;}
+    .uk-position-bottom {
+        background: #ffe4b5;
+        color: black;
+    }
+    .uk-card-default {
+        background: pink;
+        color: #e6e6e6;
+    }
+    html[hide-scrollbar="true"] ::-webkit-scrollbar {
+        display: none;
+    }
+    ol, ul {
+        padding-left: 0px !important;
+    }
+    ::-webkit-scrollbar {
+        width: 17px !important;
+        height: 17px !important;
+    }
+    ::-webkit-scrollbar-thumb {
+        -webkit-appearance: none !important;
+        background: #4D4D4D !important;
+        border-radius: 0px !important;
+        box-shadow: none !important;
+        width: 17px !important;
+        height: 17px !important;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        -webkit-appearance: none !important;
+        background: #7A7A7A !important;
+    }
+    ::-webkit-scrollbar-thumb:active {
+        -webkit-appearance: none !important;
+        background: #A6A6A6 !important;
+    }
+    ::-webkit-scrollbar-thumb:vertical {
+        border-left: 1px solid #171717 !important;
+        border-right: 1px solid #171717 !important;
+        border-top: none !important;
+        border-bottom: none !important;
+    }
+    ::-webkit-scrollbar-track {
+        -webkit-appearance: none !important;
+        background: #171717 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        width: 17px !important;
+        height: 17px !important;
+    }
+    ::-webkit-scrollbar-track:vertical {
+        -webkit-appearance: none !important;
+        border-left: 1px solid #171717 !important;
+        border-right: 1px solid #171717 !important;
+        border-top: none !important;
+        border-bottom: none !important;
+    }
+    ::-webkit-scrollbar-corner {
+        -webkit-appearance: none !important;
+        background: #202020 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+    ::-webkit-scrollbar-button {
+        -webkit-appearance: none !important;
+        width: 17px !important;
+        height: 17px !important;
+        border-radius: 0 !important;
+    }
+    ::-webkit-scrollbar-button:vertical {
+        border-left: 1px solid #171717 !important;
+        border-right: 1px solid #171717 !important;
+        border-top: none !important;
+        border-bottom: none !important;
+    }
+    ::-webkit-scrollbar-button:increment:start {
+        width: 0 !important;
+        height: 0 !important;
+    }
+    ::-webkit-scrollbar-button:decrement:end {
+        width: 0 !important;
+        height: 0 !important;
+    }
+    ::-webkit-scrollbar-button:vertical:decrement {
+        -webkit-appearance: none !important;
+        background-position: center !important;
+        background-size: 17px !important;
+        background-color: #171717 !important;
+    }
+    ::-webkit-scrollbar-button:vertical:increment {
+        -webkit-appearance: none !important;
+        background-position: center !important;
+        background-size: 17px !important;
+        background-color: #171717 !important;
+    }
+    ::-webkit-scrollbar-button:vertical:decrement:hover {
+        -webkit-appearance: none !important;
+        background-position: center !important;
+        background-size: 17px !important;
+        background-color: #373737 !important;
+    }
+    ::-webkit-scrollbar-button:vertical:increment:hover {
+        -webkit-appearance: none !important;
+        background-position: center !important;
+        background-size: 17px !important;
+        background-color: #373737 !important;
+    }
+    ::-webkit-scrollbar-button:vertical:decrement:active {
+        -webkit-appearance: none !important;
+        background-position: center !important;
+        background-size: 17px !important;
+        background-color: #A6A6A6 !important;
+    }
+    ::-webkit-scrollbar-button:vertical:increment:active {
+        -webkit-appearance: none !important;
+        background-position: center !important;
+        background-size: 17px !important;
+        background-color: #A6A6A6 !important;
+    }
+</style>
+</html>
